@@ -1,0 +1,275 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  color: #121212;
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid #0e52ff;
+  outline-offset: 3px;
+}
+
+/* Bootstrap-like responsive container (reference uses .container) */
+.container-x {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 12px;
+}
+
+@media (min-width: 576px) {
+  .container-x {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-x {
+    max-width: 720px;
+    padding-inline: 16px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container-x {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container-x {
+    max-width: 1140px;
+    padding-inline: 24px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container-x {
+    max-width: 1320px;
+  }
+}
+
+@layer components {
+  /* Primary blue CTA — mirrors .theme-primary-btn */
+  .btn-primary-gb {
+    @apply inline-flex w-full max-w-[300px] items-center gap-3 rounded-cta border-2 border-brand-blue bg-brand-blue px-[30px] py-[25px] text-center font-sans text-[20px] font-semibold leading-7 text-white;
+    transition: transform 555ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 555ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 555ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: left center;
+  }
+
+  .btn-primary-gb:hover {
+    transform: scale(1.03);
+    background-color: #0e52ff;
+    border-color: #0e52ff;
+  }
+
+  .btn-primary-gb .btn-icon {
+    @apply inline-block h-5 w-5 flex-none;
+    transition: transform 555ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-primary-gb:hover .btn-icon {
+    transform: translateX(6px) scale(1.08);
+  }
+
+  /* Yellow CTA — mirrors .theme-warning-btn */
+  .btn-warning-gb {
+    @apply inline-flex w-full max-w-[315px] items-center gap-3 rounded-cta border-2 border-brand-yellow bg-brand-yellow px-[30px] py-[25px] text-center font-sans text-[20px] font-semibold leading-7 text-black;
+    transition: transform 555ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 555ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 555ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: left center;
+  }
+
+  .btn-warning-gb:hover {
+    transform: scale(1.03);
+    background-color: #e6c003;
+    border-color: #e6c003;
+  }
+
+  .btn-warning-gb .btn-icon {
+    @apply inline-block h-5 w-5 flex-none;
+    transition: transform 555ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-warning-gb:hover .btn-icon {
+    transform: translateX(6px) scale(1.08);
+  }
+
+  /* White outline CTA — mirrors .theme-white-btn */
+  .btn-white-gb {
+    @apply inline-flex w-full max-w-[300px] items-center gap-3 rounded-cta border-2 border-white bg-white px-[30px] py-[25px] text-center font-sans text-[20px] font-semibold leading-7 text-brand-blue;
+    transition: transform 555ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 555ms cubic-bezier(0.22, 1, 0.36, 1),
+      color 555ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: left center;
+  }
+
+  .btn-white-gb:hover {
+    transform: scale(1.03);
+    background-color: #0e52ff;
+    color: #fff;
+    border-color: #0e52ff;
+  }
+
+  .section-title {
+    @apply text-[32px] font-bold leading-[37px] text-brand-ink sm:text-[37px] sm:leading-[48px] lg:text-[48px] lg:leading-[54px];
+  }
+
+  .section-subtitle {
+    @apply text-[18px] font-medium leading-[26px] text-brand-muted-2 sm:text-[24px] sm:leading-8;
+  }
+
+  .nav-link-gb {
+    @apply relative font-nav text-[17px] font-medium tracking-[-0.54px] text-brand-ink transition-colors duration-300 hover:text-brand-blue lg:text-[20px] lg:leading-6;
+  }
+
+  .nav-link-gb::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background-color: #0e52ff;
+    border-radius: 61px;
+    transform: translate(-50%, -50%);
+    transition: all 0.7s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  .nav-link-gb:hover::after {
+    left: 50%;
+    width: 100%;
+  }
+
+  .slider-arrow {
+    @apply grid h-[60px] w-[60px] place-items-center rounded-full border border-brand-line bg-white text-brand-ink transition duration-500 hover:bg-brand-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-brand-ink lg:h-[81px] lg:w-[81px];
+  }
+
+  .slider-arrow svg {
+    @apply h-5 w-5 lg:h-[26px] lg:w-[26px];
+  }
+
+  .form-field-input {
+    @apply h-[42px] w-full rounded-lg border border-brand-line bg-white px-3 text-[16px] font-semibold text-brand-ink outline-none transition placeholder:font-medium placeholder:text-brand-muted focus:border-brand-blue;
+  }
+}
+
+/* Typing caret — mirrors .typing-text:after */
+.typing-text::after {
+  content: "|";
+  animation: blink 1s step-end infinite;
+  color: #0e52ff;
+  margin-left: 3px;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes moveCity {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.5s ease-out;
+}
+
+/* Animated city skyline strip at the bottom of the stats band */
+.city-strip::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 78px;
+  width: 400%;
+  background-image: url("/assets/images/vector/frame_1.png");
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  animation: moveCity 30s linear infinite;
+  pointer-events: none;
+}
+
+/* Looping sedan GIF in the stats band */
+.sedan-gif::before {
+  content: "";
+  position: absolute;
+  left: 44px;
+  bottom: -15px;
+  width: 234px;
+  height: 109px;
+  background-image: url("/assets/images/banner/Sedan_GiF.gif");
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 9;
+  pointer-events: none;
+}
+
+@media (max-width: 576px) {
+  .sedan-gif::before {
+    left: 10px;
+    width: 140px;
+    height: 72px;
+  }
+}
+
+/* Soft upward shadow used by the booking form card */
+.booking-shadow {
+  box-shadow: 0 -34px 34px 0 rgba(180, 180, 180, 0.09),
+    0 -9px 19px 0 rgba(180, 180, 180, 0.1);
+}
+
+/* Download app phone artwork (reference uses a ::after background) */
+.download-phone-art {
+  background-image: url("/assets/images/app-screen/app-with-logo.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
