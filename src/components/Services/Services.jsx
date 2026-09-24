@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import useScrollReveal from "../../hooks/useScrollReveal";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import useScrollReveal, { prefersReducedMotion } from "../../hooks/useScrollReveal";
 import { PrimaryButton } from "../common/Buttons";
 import {
   platformCards,
@@ -25,7 +26,7 @@ function RidesPanel() {
               className={`box-item-wrap flex h-full min-h-[300px] flex-col items-start justify-center rounded-xl p-7 transition duration-500 lg:min-h-[354px] lg:p-9 ${
                 card.active
                   ? "bg-brand-blue text-white"
-                  : "bg-brand-surface hover:bg-brand-blue"
+                  : "bg-brand-surface hover:bg-brand-blue focus-within:bg-brand-blue"
               }`}
             >
               <div className="relative z-[1] mb-4 flex items-center">
@@ -54,7 +55,7 @@ function RidesPanel() {
                 </h5>
                 <p
                   className={`mb-0 mt-3 text-[16px] font-medium leading-6 transition-colors duration-500 lg:text-[18px] ${
-                    card.active ? "text-white/90" : "text-brand-muted group-hover:text-white/90"
+                    card.active ? "text-white/90" : "text-brand-muted-2 group-hover:text-white/90"
                   }`}
                 >
                   {card.desc}
@@ -73,6 +74,7 @@ function DetailPanel({ panel }) {
 
   useEffect(() => {
     if (!ref.current) return undefined;
+    if (prefersReducedMotion()) return undefined;
     const ctx = gsap.fromTo(
       ref.current,
       { autoAlpha: 0, y: 24 },
@@ -94,8 +96,8 @@ function DetailPanel({ panel }) {
         <img
           src={panel.image}
           alt=""
-          width="100%"
-          height="100%"
+          width="640"
+          height="420"
           className="h-full w-full object-cover"
           loading="lazy"
         />
@@ -108,8 +110,13 @@ export default function Services() {
   const [active, setActive] = useState("rides");
   const headerRef = useScrollReveal({ y: 30, stagger: 0.1 });
 
+  // Swapping panels changes page height — keep ScrollTrigger positions accurate.
+  useEffect(() => {
+    ScrollTrigger.refresh();
+  }, [active]);
+
   return (
-    <section id="services" className="bg-white py-[50px] lg:py-[70px]">
+    <section id="services" className="scroll-mt-24 bg-white py-[50px] lg:py-[70px]">
       <div className="container-x">
         <div ref={headerRef}>
           <div data-reveal className="section-header">
