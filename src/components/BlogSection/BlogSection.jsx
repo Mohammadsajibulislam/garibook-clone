@@ -6,7 +6,7 @@ export default function BlogSection() {
   const containerRef = useScrollReveal({ y: 36, stagger: 0.12 });
 
   return (
-    <section id="blogs" className="bg-white py-[50px] lg:py-[70px]">
+    <section id="blogs" className="scroll-mt-24 bg-white py-[50px] lg:py-[70px]">
       <div ref={containerRef} className="container-x">
         <div
           className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
@@ -31,21 +31,21 @@ export default function BlogSection() {
         <div className="mt-8 grid gap-6 md:grid-cols-3 lg:mt-[50px]">
           {blogPosts.map((post) => (
             <article key={post.title} data-reveal className="group">
-              <a href="#blogs" className="block overflow-hidden rounded-xl">
+              <a href={post.href} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-xl">
                 <img
                   src={post.image}
-                  alt=""
-                  width="100%"
-                  height="100%"
+                  alt={post.imageAlt || ""}
+                  width="640"
+                  height="480"
                   className="h-[240px] w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
               </a>
-              <p className="mb-0 mt-4 text-[14px] font-medium text-brand-muted">
+              <p className="mb-0 mt-4 text-[14px] font-medium text-brand-muted-2">
                 {post.date}
               </p>
               <h3 className="mb-0 mt-2 text-[18px] font-bold leading-snug text-brand-ink">
-                <a href="#blogs" className="hover:text-brand-blue">
+                <a href={post.href} target="_blank" rel="noreferrer" className="hover:text-brand-blue">
                   {post.title}
                 </a>
               </h3>
@@ -59,3 +59,7 @@ export default function BlogSection() {
     </section>
   );
 }
+
+
+
+

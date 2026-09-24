@@ -5,7 +5,7 @@ export default function PeopleTogether() {
   const containerRef = useScrollReveal({ y: 40, stagger: 0.14 });
 
   return (
-    <section id="together" className="bg-white py-[50px] lg:py-[70px]">
+    <section id="together" className="scroll-mt-24 bg-white py-[50px] lg:py-[70px]">
       <div ref={containerRef} className="container-x">
         <div className="section-header" data-reveal>
           <h2 className="section-title m-0 whitespace-pre-line">
@@ -18,13 +18,13 @@ export default function PeopleTogether() {
             <article
               key={card.title}
               data-reveal
-              className="group relative mb-[30px] overflow-hidden rounded-2xl sm:mb-0"
+              className="group relative overflow-hidden rounded-2xl"
             >
               <img
                 src={card.image}
                 alt={card.title}
-                width="100%"
-                height="100%"
+                width="640"
+                height="480"
                 className="h-[280px] w-full object-cover transition-transform duration-500 group-hover:scale-105 sm:h-[320px] lg:h-[360px]"
                 loading="lazy"
               />
