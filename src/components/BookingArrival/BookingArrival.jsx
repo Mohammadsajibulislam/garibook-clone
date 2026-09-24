@@ -1,8 +1,10 @@
 import useScrollReveal from "../../hooks/useScrollReveal";
 import { PrimaryButton } from "../common/Buttons";
 import { APP_DOWNLOAD_URL, bookingArrivalCards } from "../../data/content";
+import { useI18n } from "../../i18n/I18nContext";
 
 export default function BookingArrival() {
+  const { t } = useI18n();
   const containerRef = useScrollReveal({ y: 40, stagger: 0.12 });
 
   return (
@@ -11,11 +13,11 @@ export default function BookingArrival() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[720px] lg:w-1/2" data-reveal>
             <h2 className="section-title m-0 text-white">
-              From Booking to Arrival It&rsquo;s All in Your Hands
+              {t("arrival.title")}
             </h2>
           </div>
           <div data-reveal className="lg:flex lg:justify-end">
-            <PrimaryButton href={APP_DOWNLOAD_URL}>Download App</PrimaryButton>
+            <PrimaryButton href={APP_DOWNLOAD_URL}>{t("download.cta")}</PrimaryButton>
           </div>
         </div>
 

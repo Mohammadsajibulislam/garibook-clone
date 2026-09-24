@@ -30,8 +30,7 @@ function buildTyped(segments, charCount) {
 
 /**
  * Typewriter loop across hero headlines, with per-word accent segments.
- * Mirrors the reference hero's typing-text effect (60ms type / 2s hold).
- * Screen readers get a single static headline instead of per-character updates.
+ * Pauses while the tab is hidden; screen readers get a static headline.
  */
 export default function TypingHeadline({ titles }) {
   const flatTitles = useMemo(() => titles.map(flatten), [titles]);
@@ -39,43 +38,39 @@ export default function TypingHeadline({ titles }) {
   const [charCount, setCharCount] = useState(0);
   const [deleting, setDeleting] = useState(false);
   const [reduced] = useState(() => prefersReducedMotion());
+  const [hidden, setHidden] = useState(
+    () => typeof document !== "undefined" && document.hidden
+  );
 
   useEffect(() => {
-    if (reduced) return undefined;
+    const onVisibility = () => setHidden(document.hidden);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+
+  useEffect(() => {
+    if (reduced || hidden) return undefined;
 
     const full = flatTitles[titleIndex];
     let timeoutId;
 
-    const tick = () => {
-      if (!deleting) {
-        setCharCount((c) => {
-          const next = c + 1;
-          if (next >= full.length) {
-            timeoutId = setTimeout(() => setDeleting(true), HOLD_MS);
-            return full.length;
-          }
-          timeoutId = setTimeout(tick, TYPE_SPEED);
-          return next;
-        });
-      } else {
-        setCharCount((c) => {
-          const next = c - 1;
-          if (next <= 0) {
-            timeoutId = setTimeout(() => {
-              setTitleIndex((i) => (i + 1) % flatTitles.length);
-              setDeleting(false);
-            }, PAUSE_BEFORE_DELETE_MS);
-            return 0;
-          }
-          timeoutId = setTimeout(tick, DELETE_SPEED);
-          return next;
-        });
-      }
-    };
+    // One timer per state — side effects live only in the effect (never inside
+    // a setState updater), so StrictMode's double-invoke can't leak timers.
+    if (!deleting && charCount < full.length) {
+      timeoutId = setTimeout(() => setCharCount((c) => c + 1), TYPE_SPEED);
+    } else if (!deleting) {
+      timeoutId = setTimeout(() => setDeleting(true), HOLD_MS);
+    } else if (charCount > 0) {
+      timeoutId = setTimeout(() => setCharCount((c) => c - 1), DELETE_SPEED);
+    } else {
+      timeoutId = setTimeout(() => {
+        setTitleIndex((i) => (i + 1) % flatTitles.length);
+        setDeleting(false);
+      }, PAUSE_BEFORE_DELETE_MS);
+    }
 
-    timeoutId = setTimeout(tick, deleting ? DELETE_SPEED : TYPE_SPEED);
     return () => clearTimeout(timeoutId);
-  }, [titleIndex, deleting, flatTitles, reduced]);
+  }, [titleIndex, charCount, deleting, flatTitles, reduced, hidden]);
 
   if (reduced) {
     return <span className="typing-text-static">{flatTitles[titleIndex]}</span>;
@@ -100,5 +95,3 @@ export default function TypingHeadline({ titles }) {
     </>
   );
 }
-
-

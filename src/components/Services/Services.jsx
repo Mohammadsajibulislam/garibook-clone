@@ -8,57 +8,42 @@ import {
   servicePanels,
   serviceTabs,
 } from "../../data/content";
+import { useI18n } from "../../i18n/I18nContext";
+import { handleTabKeyDown } from "../../lib/tabs";
 
 function RidesPanel() {
+  const { t, pick } = useI18n();
   const ref = useScrollReveal({ y: 30, stagger: 0.1 });
 
   return (
     <div ref={ref}>
       <div data-reveal className="section-header mb-4 lg:mb-5">
         <h2 className="section-title m-0 whitespace-pre-line">
-          {"Every Ride\nOne Platform"}
+          {t("services.rides.title")}
         </h2>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {platformCards.map((card) => (
-          <div data-reveal key={card.title} className="group h-full">
-            <div
-              className={`box-item-wrap flex h-full min-h-[300px] flex-col items-start justify-center rounded-xl p-7 transition duration-500 lg:min-h-[354px] lg:p-9 ${
-                card.active
-                  ? "bg-brand-blue text-white"
-                  : "bg-brand-surface hover:bg-brand-blue focus-within:bg-brand-blue"
-              }`}
-            >
+          <div data-reveal key={pick(card.title)} className="group h-full">
+            <div className="box-item-wrap flex h-full min-h-[300px] flex-col items-start justify-center rounded-xl bg-brand-surface p-7 transition duration-500 hover:bg-brand-blue focus-within:bg-brand-blue lg:min-h-[354px] lg:p-9">
               <div className="relative z-[1] mb-4 flex items-center">
                 <span
-                  className={`absolute -left-9 top-0 h-[86px] rounded-r-xl bg-white transition-all duration-500 ${
-                    card.active ? "w-[120px]" : "w-0 group-hover:w-[120px]"
-                  }`}
+                  className="absolute -left-9 top-0 h-[86px] w-0 rounded-r-xl bg-white transition-all duration-500 group-hover:w-[120px]"
                   aria-hidden="true"
                 />
                 <img
                   src={card.image}
                   alt=""
                   height="72"
-                  className={`relative h-[72px] w-auto transition-all duration-500 ${
-                    card.active ? "ml-5" : "group-hover:ml-5"
-                  }`}
+                  className="relative h-[72px] w-auto transition-all duration-500 group-hover:ml-5"
                 />
               </div>
-              <div className={`transition-colors duration-500 ${card.active ? "text-white" : "group-hover:text-white"}`}>
-                <h5
-                  className={`m-0 text-[22px] font-semibold leading-7 transition-colors duration-500 lg:text-[24px] ${
-                    card.active ? "text-white" : "text-brand-ink group-hover:text-white"
-                  }`}
-                >
-                  {card.title}
+              <div className="transition-colors duration-500 group-hover:text-white">
+                <h5 className="m-0 text-[22px] font-semibold leading-7 text-brand-ink transition-colors duration-500 group-hover:text-white lg:text-[24px]">
+                  {pick(card.title)}
                 </h5>
-                <p
-                  className={`mb-0 mt-3 text-[16px] font-medium leading-6 transition-colors duration-500 lg:text-[18px] ${
-                    card.active ? "text-white/90" : "text-brand-muted-2 group-hover:text-white/90"
-                  }`}
-                >
-                  {card.desc}
+                <p className="mb-0 mt-3 text-[16px] font-medium leading-6 text-brand-muted-2 transition-colors duration-500 group-hover:text-white/90 lg:text-[18px]">
+                  {pick(card.desc)}
                 </p>
               </div>
             </div>
@@ -70,6 +55,7 @@ function RidesPanel() {
 }
 
 function DetailPanel({ panel }) {
+  const { t } = useI18n();
   const ref = useRef(null);
 
   useEffect(() => {
@@ -84,12 +70,18 @@ function DetailPanel({ panel }) {
   }, [panel]);
 
   return (
-    <div ref={ref} className="grid items-center gap-8 md:grid-cols-2 md:gap-10">
+    <div
+      ref={ref}
+      role="tabpanel"
+      id="services-panel-detail"
+      tabIndex={0}
+      className="grid items-center gap-8 md:grid-cols-2 md:gap-10"
+    >
       <div className="md:pr-8 lg:pr-12">
         <div className="section-header">
           <h2 className="section-title m-0 whitespace-pre-line">{panel.title}</h2>
           <p className="section-subtitle my-4 max-w-[640px]">{panel.desc}</p>
-          <PrimaryButton href={panel.href}>Learn More</PrimaryButton>
+          <PrimaryButton href={panel.href}>{t("services.learn")}</PrimaryButton>
         </div>
       </div>
       <div className="overflow-hidden rounded-xl">
@@ -107,6 +99,7 @@ function DetailPanel({ panel }) {
 }
 
 export default function Services() {
+  const { t } = useI18n();
   const [active, setActive] = useState("rides");
   const headerRef = useScrollReveal({ y: 30, stagger: 0.1 });
 
@@ -115,44 +108,71 @@ export default function Services() {
     ScrollTrigger.refresh();
   }, [active]);
 
+  const isRides = active === "rides";
+
   return (
     <section id="services" className="scroll-mt-24 bg-white py-[50px] lg:py-[70px]">
       <div className="container-x">
         <div ref={headerRef}>
           <div data-reveal className="section-header">
-            <h2 className="section-title m-0">Our Services</h2>
+            <h2 className="section-title m-0">{t("services.title")}</h2>
           </div>
 
           <div
             data-reveal
             role="tablist"
-            aria-label="Our services"
+            aria-label={t("services.tabs")}
             className="mt-4 flex flex-wrap gap-3"
           >
-            {serviceTabs.map((tab) => (
-              <button
-                key={tab.key}
-                type="button"
-                role="tab"
-                aria-selected={active === tab.key}
-                onClick={() => setActive(tab.key)}
-                className={`rounded-xl px-4 py-3 text-[14px] font-semibold leading-5 transition-colors duration-500 sm:px-8 sm:py-[15px] sm:text-[20px] sm:leading-7 ${
-                  active === tab.key
-                    ? "bg-brand-blue text-white"
-                    : "bg-brand-chip text-brand-ink hover:bg-brand-blue hover:text-white"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+            {serviceTabs.map((tab) => {
+              const selected = active === tab.key;
+              const panelId = tab.key === "rides" ? "services-panel-rides" : "services-panel-detail";
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  role="tab"
+                  id={`services-tab-${tab.key}`}
+                  aria-selected={selected}
+                  aria-controls={panelId}
+                  tabIndex={selected ? 0 : -1}
+                  onClick={() => setActive(tab.key)}
+                  onKeyDown={(e) =>
+                    handleTabKeyDown(e, {
+                      tabs: serviceTabs,
+                      activeKey: active,
+                      idPrefix: "services",
+                      onSelect: setActive,
+                    })
+                  }
+                  className={`rounded-xl px-4 py-3 text-[14px] font-semibold leading-5 transition-colors duration-500 sm:px-8 sm:py-[15px] sm:text-[20px] sm:leading-7 ${
+                    selected
+                      ? "bg-brand-blue text-white"
+                      : "bg-brand-chip text-brand-ink hover:bg-brand-blue hover:text-white"
+                  }`}
+                >
+                  {t(tab.labelKey)}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         <div className="mt-8 lg:mt-[50px]">
-          {active === "rides" ? (
-            <RidesPanel />
+          {isRides ? (
+            <div
+              role="tabpanel"
+              id="services-panel-rides"
+              aria-labelledby="services-tab-rides"
+              tabIndex={0}
+            >
+              <RidesPanel />
+            </div>
           ) : (
-            <DetailPanel panel={servicePanels[active]} />
+            <DetailPanel
+              key={active}
+              panel={servicePanels[active]}
+            />
           )}
         </div>
       </div>

@@ -1,13 +1,13 @@
 // Centralized content for the Garibook homepage recreation.
-// Keeps copy/data out of components so markup stays presentational.
+// Text fields use { en, bn } so components can pick via useI18n().pick().
 
 export const navLinks = [
-  { label: "About Us", href: "#freedom" },
-  { label: "Earn With Garibook", href: "#driver" },
-  { label: "Garibook Business", href: "#services" },
-  { label: "Garibook Club", href: "#services" },
-  { label: "Campaign", href: "#news" },
-  { label: "Blogs", href: "#blogs" },
+  { label: { en: "About Us", bn: "আমাদের সম্পর্কে" }, href: "#freedom" },
+  { label: { en: "Earn With Garibook", bn: "গাড়িবুকের সাথে আয় করুন" }, href: "#driver" },
+  { label: { en: "Garibook Business", bn: "গাড়িবুক বিজনেস" }, href: "#services" },
+  { label: { en: "Garibook Club", bn: "গাড়িবুক ক্লাব" }, href: "#services" },
+  { label: { en: "Campaign", bn: "ক্যাম্পেইন" }, href: "#news" },
+  { label: { en: "Blogs", bn: "ব্লগ" }, href: "#blogs" },
 ];
 
 export const APP_DOWNLOAD_URL =
@@ -34,6 +34,24 @@ export const heroTitles = [
   ],
 ];
 
+export const heroTitlesBn = [
+  [
+    { text: "নির্বিঘ্ন " },
+    { text: "ভ্রমণের", accent: true },
+    { text: " নিশ্চয়তা" },
+  ],
+  [
+    { text: "আরামে " },
+    { text: "বিলাসবহুল", accent: true },
+    { text: " যাত্রা" },
+  ],
+  [
+    { text: "আপনার " },
+    { text: "যাত্রা", accent: true },
+    { text: " এখানেই শুরু ..." },
+  ],
+];
+
 export const carTypes = [
   "Sedan",
   "Sedan Premium",
@@ -50,41 +68,52 @@ export const airports = [
 ];
 
 export const stats = [
-  { value: 300000, suffix: "+", label: "Trip Requests" },
-  { value: 850000, suffix: "+", label: "Total Customers" },
-  { value: 35000, suffix: "+", label: "Active Drivers" },
-  { value: 64, suffix: "", label: "District Covered" },
+  { value: 300000, suffix: "+", labelKey: "stats.trips" },
+  { value: 850000, suffix: "+", labelKey: "stats.customers" },
+  { value: 35000, suffix: "+", labelKey: "stats.drivers" },
+  { value: 64, suffix: "", labelKey: "stats.districts" },
 ];
 
 export const platformCards = [
   {
-    title: "Intercity Car Rental",
-    desc: "Travel between cities with comfort and confidence.",
+    title: { en: "Intercity Car Rental", bn: "ইন্টারসিটি কার রেন্টাল" },
+    desc: {
+      en: "Travel between cities with comfort and confidence.",
+      bn: "আরাম ও আত্মবিশ্বাসের সাথে শহরে শহরে ভ্রমণ করুন।",
+    },
     image: "/assets/images/cars/intercity_car_rental.svg",
-    active: true,
   },
   {
-    title: "Ride share",
-    desc: "Go anywhere in the city, quickly and easily.",
+    title: { en: "Ride share", bn: "রাইড শেয়ার" },
+    desc: {
+      en: "Go anywhere in the city, quickly and easily.",
+      bn: "শহরের যেকোনো জায়গায় দ্রুত ও সহজে যান।",
+    },
     image: "/assets/images/cars/rideshare.svg",
   },
   {
-    title: "Airport Rental",
-    desc: "Whether you’re flying abroad or returning home, enjoy a comfortable and worry-free airport journey.",
+    title: { en: "Airport Rental", bn: "এয়ারপোর্ট রেন্টাল" },
+    desc: {
+      en: "Whether you’re flying abroad or returning home, enjoy a comfortable and worry-free airport journey.",
+      bn: "বিদেশ যাচ্ছেন নাকি দেশে ফিরছেন — আরামদায়ক ও নির্ভয়ে এয়ারপোর্ট যাত্রা উপভোগ করুন।",
+    },
     image: "/assets/images/cars/airport_rental.svg",
   },
   {
-    title: "Hourly Rental",
-    desc: "Rent a car by the hour, tailored to your needs.",
+    title: { en: "Hourly Rental", bn: "ঘণ্টা ভিত্তিক ভাড়া" },
+    desc: {
+      en: "Rent a car by the hour, tailored to your needs.",
+      bn: "আপনার প্রয়োজন অনুযায়ী ঘণ্টা হিসেবে গাড়ি ভাড়া নিন।",
+    },
     image: "/assets/images/cars/hourly_rental.svg",
   },
 ];
 
 export const serviceTabs = [
-  { key: "rides", label: "Rides" },
-  { key: "business", label: "Garibook Business" },
-  { key: "club", label: "Garibook Club" },
-  { key: "vms", label: "VMS" },
+  { key: "rides", labelKey: "services.tab.rides" },
+  { key: "business", labelKey: "services.tab.business" },
+  { key: "club", labelKey: "services.tab.club" },
+  { key: "vms", labelKey: "services.tab.vms" },
 ];
 
 export const servicePanels = {
@@ -111,32 +140,32 @@ export const servicePanels = {
 export const chooseSteps = [
   {
     icon: "/assets/icon/car.svg",
-    title: "Choose the Car",
-    desc: "Pick what suits your comfort.",
+    title: { en: "Choose the Car", bn: "গাড়ি বেছে নিন" },
+    desc: { en: "Pick what suits your comfort.", bn: "আপনার আরাম অনুযায়ী বেছে নিন।" },
   },
   {
     icon: "/assets/icon/drive.svg",
-    title: "Choose the Driver",
-    desc: "Based on ratings and reviews.",
+    title: { en: "Choose the Driver", bn: "ড্রাইভার বেছে নিন" },
+    desc: { en: "Based on ratings and reviews.", bn: "রেটিং ও রিভিউ অনুযায়ী।" },
   },
   {
     icon: "/assets/icon/price.svg",
-    title: "Choose the Fare",
-    desc: "Select the bid that fits your budget.",
+    title: { en: "Choose the Fare", bn: "ভাড়া বেছে নিন" },
+    desc: { en: "Select the bid that fits your budget.", bn: "আপনার বাজেটের উপযুক্ত অফার বেছে নিন।" },
   },
 ];
 
 export const peopleTogetherCards = [
   {
-    title: "Airport Rentals",
+    title: { en: "Airport Rentals", bn: "এয়ারপোর্ট রেন্টাল" },
     image: "/assets/images/services/Airport Rental_Webp.webp",
   },
   {
-    title: "Family Trips",
+    title: { en: "Family Trips", bn: "পারিবারিক ভ্রমণ" },
     image: "/assets/images/services/family_trips.webp",
   },
   {
-    title: "Long Tours",
+    title: { en: "Long Tours", bn: "দীর্ঘ ভ্রমণ" },
     image: "/assets/images/services/Group Tour_Webp.webp",
   },
 ];
@@ -178,6 +207,7 @@ export const newsFeatures = [
     source: "প্রথম আলো",
     image: "/assets/images/services/family_trips.webp",
     imageAlt: "Family enjoying a trip together in a Garibook car",
+    href: "https://www.prothomalo.com/",
   },
   {
     date: "December 04, 2024",
@@ -187,6 +217,7 @@ export const newsFeatures = [
     source: "Dhaka Tribune",
     image: "/assets/images/services/busines.jpeg",
     imageAlt: "Business traveler working on a laptop in the back seat",
+    href: "https://www.dhakatribune.com/business/365516/digital-app-garibook-to-offer-%E2%80%98chander-gari%E2%80%99",
   },
   {
     date: "December 04, 2024",
@@ -196,6 +227,7 @@ export const newsFeatures = [
     source: "কালের কণ্ঠ",
     image: "/assets/images/services/explore.jpeg",
     imageAlt: "Garibook app services overview on a phone screen",
+    href: "https://www.kalerkantho.com/",
   },
 ];
 
@@ -231,7 +263,7 @@ export const blogPosts = [
     date: "September 15, 2026",
     title: "রাইড শেয়ারিংয়ে বদলে যাচ্ছে বাংলাদেশের শহরে পরিবহন ব্যবস্থা",
     excerpt:
-      "রাইড শেয়ারিংয়ে বদলে যাচ্ছে বাংলাদেশের শহরে পরিবহন ব্যবস্থা",
+      "শেয়ার রাইড মডেলে শহরের যানজট কমানো যায়, খরচ ভাগ হয় এবং নিরাপদ ভ্রমণের নতুন সম্ভাবনা তৈরি হচ্ছে দেশের মেট্রোপলিটন এলাকায়।",
     image: "/assets/images/services/family_trips.webp",
     imageAlt: "Riders sharing a city commute",
     href: "https://garibook.com/blogs/%E0%A6%B0%E0%A6%BE%E0%A6%87%E0%A6%A1-%E0%A6%B6%E0%A7%87%E0%A7%9F%E0%A6%BE%E0%A6%B0%E0%A6%BF%E0%A6%82%E0%A7%9F%E0%A7%87-%E0%A6%AC%E0%A6%A6%E0%A6%B2%E0%A7%87-%E0%A6%AF%E0%A6%BE%E0%A6%9A%E0%A7%8D%E0%A6%9B%E0%A7%87-%E0%A6%AC%E0%A6%BE%E0%A6%82%E0%A6%B2%E0%A6%BE%E0%A6%A6%E0%A7%87%E0%A6%B6%E0%A7%87%E0%A6%B0-%E0%A6%B6%E0%A6%B9%E0%A7%80%E0%A6%B0%E0%A7%87-%E0%A6%AA%E0%A6%B0%E0%A6%BF%E0%A6%AC%E0%A6%B9%E0%A6%A8-%E0%A6%AC%E0%A7%8D%E0%A6%AF%E0%A6%AC%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE",
@@ -239,39 +271,39 @@ export const blogPosts = [
   {
     date: "September 20, 2026",
     title: "সিলেটের দর্শনীয় স্থান সমূহ, খাবার ও থাকার ব্যবস্থা",
-    excerpt: "সিলেটের-দর্শনীয়-স্থান",
+    excerpt: "পাহাড়, চা-বাগান ও স্থানীয় রান্না — সিলেট ভ্রমণের জন্য প্রয়োজনীয় গাইড।",
     image: "/assets/images/services/explore.jpeg",
     imageAlt: "Scenic river landscape in Sylhet",
-    href: "https://garibook.com/blogs/%E0%A6%B8%E0%A6%BF%E0%A6%B2%E0%A7%87%E0%A6%9F%E0%A7%87%E0%A6%B0-%E0%A6%A6%E0%A6%B0%E0%A7%8D%E0%A6%B6%E0%A6%A8%E0%A7%80%E0%A7%9F-%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE%E0%A6%A8-%E0%A6%B8%E0%A6%AE%E0%A7%82%E0%A6%B9-%E0%A6%96%E0%A6%BE%E0%A6%AC%E0%A6%BE%E0%A6%B0-%E0%A6%93-%E0%A6%A5%E0%A6%BE%E0%A6%95%E0%A6%BE%E0%A6%B0-%E0%A6%AC%E0%A7%8D%E0%A6%8F%E0%A6%AC%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE",
+    href: "https://garibook.com/blogs/%E0%A6%B8%E0%A6%BF%E0%A6%B2%E0%A7%87%E0%A6%9F%E0%A7%87%E0%A6%B0-%E0%A6%A6%E0%A6%B0%E0%A7%8D%E0%A6%B6%E0%A6%A8%E0%A7%80%E0%A7%9F-%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE%E0%A6%A8-%E0%A6%B8%E0%A6%AE%E0%A7%82%E0%A6%B9-%E0%A6%96%E0%A6%BE%E0%A6%AC%E0%A6%BE%E0%A6%B0-%E0%A6%93-%E0%A6%A5%E0%A6%BE%E0%A6%95%E0%A6%BE%E0%A6%B0-%E0%A6%AC%E0%A7%8D%E0%A6%AF%E0%A6%AC%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE",
   },
   {
     date: "September 20, 2026",
     title: "নঙ্গার দর্শনীয় স্থান সমূহ, খাবার ও থাকার ব্যবস্থা",
-    excerpt: "নঙ্গার দর্শনীয় স্থান সমূহ",
+    excerpt: "নদীপথ, ট্রেকিং ও স্থানীয় খাবার — নঙ্গার যাত্রা পরিকল্পনার সংক্ষিপ্ত কর্মসূচি।",
     image: "/assets/images/services/Group Tour_Webp.webp",
     imageAlt: "Historic ruins at a travel destination",
-    href: "https://garibook.com/blogs/%E0%A6%A8%E0%A6%97%E0%A6%97%E0%A6%BE%E0%A6%81%E0%A6%B0-%E0%A6%A6%E0%A6%B0%E0%A7%8D%E0%A6%B6%E0%A6%A8%E0%A7%80%E0%A7%9F-%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE%E0%A6%A8-%E0%A6%B8%E0%A6%AE%E0%A7%82%E0%A6%B9-%E0%A6%96%E0%A6%BE%E0%A6%AC%E0%A6%BE%E0%A6%B0-%E0%A6%93-%E0%A6%A5%E0%A6%BE%E0%A6%95%E0%A6%BE%E0%A6%B0-%E0%A6%AC%E0%A7%8D%E0%A6%8F%E0%A6%AC%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE",
+    href: "https://garibook.com/blogs/%E0%A6%A8%E0%A6%97%E0%A6%97%E0%A6%BE%E0%A6%81%E0%A6%B0-%E0%A6%A6%E0%A6%B0%E0%A7%8D%E0%A6%B6%E0%A6%A8%E0%A7%80%E0%A7%9F-%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE%E0%A6%A8-%E0%A6%B8%E0%A6%AE%E0%A7%82%E0%A6%B9-%E0%A6%96%E0%A6%BE%E0%A6%AC%E0%A6%BE%E0%A6%B0-%E0%A6%93-%E0%A6%A5%E0%A6%BE%E0%A6%95%E0%A6%BE%E0%A6%B0-%E0%A6%AC%E0%A7%8D%E0%A6%AF%E0%A6%AC%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE",
   },
 ];
 
 export const footerLinks = {
   garibook: [
-    { label: "About Us", href: "#freedom" },
-    { label: "Customer Reviews", href: "#reviews" },
-    { label: "Career", href: "#driver" },
-    { label: "Newsroom", href: "#news" },
-    { label: "Garibook Map", href: "https://map.garibook.com/" },
+    { labelKey: "footer.about", href: "#freedom" },
+    { labelKey: "footer.reviews", href: "#reviews" },
+    { labelKey: "footer.career", href: "#driver" },
+    { labelKey: "footer.newsroom", href: "#news" },
+    { labelKey: "footer.map", href: "https://map.garibook.com/" },
   ],
   services: [
-    { label: "Intercity Rental", href: "#services" },
-    { label: "Airport Pick and Drop", href: "#booking" },
-    { label: "Hourly Rental", href: "#services" },
-    { label: "Vehicle Management System (VMS)", href: "#services" },
+    { labelKey: "footer.intercity", href: "#services" },
+    { labelKey: "footer.airport", href: "#booking" },
+    { labelKey: "footer.hourly", href: "#services" },
+    { labelKey: "footer.vms", href: "#services" },
   ],
   partner: [
-    { label: "Become a Smart Driver", href: "#driver" },
-    { label: "Become a member of Garibook Club", href: "#services" },
-    { label: "Garibook Business for Corporate Travel", href: "#services" },
+    { labelKey: "footer.smartDriver", href: "#driver" },
+    { labelKey: "footer.club", href: "#services" },
+    { labelKey: "footer.corporate", href: "#services" },
   ],
   contacts: [
     { label: "support@garibook.com", href: "mailto:support@garibook.com" },

@@ -2,11 +2,9 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import TypingHeadline from "./TypingHeadline";
 import { WarningButton } from "../common/Buttons";
-import {
-  APP_DOWNLOAD_URL,
-  heroTitles,
-} from "../../data/content";
+import { APP_DOWNLOAD_URL, heroTitles, heroTitlesBn } from "../../data/content";
 import { prefersReducedMotion } from "../../hooks/useScrollReveal";
+import { useI18n } from "../../i18n/I18nContext";
 
 /**
  * GSAP animation #1 — orchestrated hero entrance on load:
@@ -14,6 +12,7 @@ import { prefersReducedMotion } from "../../hooks/useScrollReveal";
  * Skipped entirely when the user prefers reduced motion.
  */
 export default function Hero() {
+  const { t, lang } = useI18n();
   const rootRef = useRef(null);
 
   useEffect(() => {
@@ -55,7 +54,10 @@ export default function Hero() {
               data-hero-title
               className="m-0 min-h-[3.5rem] text-[32px] font-bold leading-[38px] text-brand-ink sm:text-[48px] sm:leading-[55px] lg:min-h-[150px] lg:text-[64px] lg:leading-[72px]"
             >
-              <TypingHeadline titles={heroTitles} />
+              <TypingHeadline
+                key={lang}
+                titles={lang === "bn" ? heroTitlesBn : heroTitles}
+              />
             </h1>
           </div>
 
@@ -64,11 +66,10 @@ export default function Hero() {
               data-hero-sub
               className="m-0 max-w-[640px] text-[20px] font-medium leading-7 text-brand-muted-2 sm:text-[28px] sm:leading-8"
             >
-              Choose your city, pick your car and enjoy the journey with
-              Garibook&rsquo;s best drivers.
+              {t("hero.sub")}
             </p>
             <div data-hero-cta className="mt-4">
-              <WarningButton href={APP_DOWNLOAD_URL}>Download App</WarningButton>
+              <WarningButton href={APP_DOWNLOAD_URL}>{t("hero.download")}</WarningButton>
             </div>
           </div>
         </div>

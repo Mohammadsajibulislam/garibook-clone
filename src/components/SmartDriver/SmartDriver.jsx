@@ -1,15 +1,17 @@
 import useScrollReveal from "../../hooks/useScrollReveal";
 import { PrimaryButton } from "../common/Buttons";
 import { DRIVER_APP_URL } from "../../data/content";
+import { useI18n } from "../../i18n/I18nContext";
 
 export default function SmartDriver() {
+  const { t } = useI18n();
   const containerRef = useScrollReveal({ y: 40, stagger: 0.15 });
 
   return (
     <section id="driver" className="scroll-mt-24 overflow-hidden bg-white py-[50px] lg:py-[70px]">
       <div ref={containerRef} className="container-x">
         <div className="section-header" data-reveal>
-          <h2 className="section-title m-0">Be a Smart Driver</h2>
+          <h2 className="section-title m-0">{t("driver.title")}</h2>
         </div>
 
         <div
@@ -18,17 +20,15 @@ export default function SmartDriver() {
         >
           <div className="grid items-center gap-6 md:grid-cols-2">
             <div className="flex flex-col items-start justify-center px-6 py-10 sm:px-10 lg:min-h-[420px] lg:pl-[100px] lg:pr-8">
-              <h3 className="m-0 text-[32px] font-bold leading-9 text-brand-blue lg:text-[64px] lg:leading-[72px]">
-                0% Commission
-                <br />
-                100% Freedom
+              <h3 className="m-0 whitespace-pre-line text-[32px] font-bold leading-9 text-brand-blue lg:text-[64px] lg:leading-[72px]">
+                {t("driver.headline")}
               </h3>
               <div className="mt-4">
                 <PrimaryButton
                   href={DRIVER_APP_URL}
                   className="max-w-[330px]"
                 >
-                  Download Smart Driver App
+                  {t("driver.cta")}
                 </PrimaryButton>
               </div>
             </div>

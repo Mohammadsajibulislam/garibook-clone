@@ -1,0 +1,23 @@
+import { useI18n } from "../i18n/I18nContext";
+
+export default function TermsPage() {
+  const { t } = useI18n();
+
+  return (
+    <section className="bg-white py-[70px]">
+      <div className="container-x max-w-[760px]">
+        <h1 className="m-0 text-[36px] font-bold text-brand-ink">{t("terms.title")}</h1>
+        <p className="mt-4 mb-0 text-[16px] leading-relaxed text-brand-muted-2">{t("terms.intro")}</p>
+
+        <h2 className="mt-10 mb-2 text-[22px] font-bold text-brand-ink">{t("terms.s1")}</h2>
+        <p className="m-0 text-[16px] leading-relaxed text-brand-muted-2">{t("terms.p1")}</p>
+
+        <h2 className="mt-8 mb-2 text-[22px] font-bold text-brand-ink">{t("terms.s2")}</h2>
+        <p className="m-0 text-[16px] leading-relaxed text-brand-muted-2">{t("terms.p2")}</p>
+
+        <h2 className="mt-8 mb-2 text-[22px] font-bold text-brand-ink">{t("terms.s3")}</h2>
+        <p className="m-0 text-[16px] leading-relaxed text-brand-muted-2">{t("terms.p3")}</p>
+      </div>
+    </section>
+  );
+}
