@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { navLinks } from "../../data/content";
 
 function LanguageToggle({ className = "" }) {
@@ -18,6 +18,8 @@ function LanguageToggle({ className = "" }) {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef(null);
+  const wasOpen = useRef(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -31,6 +33,23 @@ export default function Navbar() {
     return () => {
       document.body.style.overflow = "";
     };
+  }, [open]);
+
+  // Escape closes the drawer; focus returns to the toggle button.
+  useEffect(() => {
+    if (!open) {
+      if (wasOpen.current && toggleRef.current) {
+        toggleRef.current.focus();
+      }
+      wasOpen.current = false;
+      return undefined;
+    }
+    wasOpen.current = true;
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   return (
@@ -60,8 +79,9 @@ export default function Navbar() {
             />
           </a>
 
-          <div className="hidden items-center gap-7 lg:flex">
-            <ul className="flex items-center gap-7">
+          {/* Tighter gaps/text at lg so 6 long links never overflow */}
+          <div className="hidden items-center gap-4 xl:flex xl:gap-7">
+            <ul className="flex items-center gap-4 xl:gap-7">
               {navLinks.map((link) => (
                 <li key={link.label}>
                   <a className="nav-link-gb" href={link.href}>
@@ -71,25 +91,27 @@ export default function Navbar() {
               ))}
             </ul>
             <a
-              href="#login"
-              className="rounded-lg bg-brand-blue px-7 py-3 font-nav text-[17px] font-medium tracking-[-0.54px] text-white transition hover:bg-brand-blue-deep"
+              href="#booking"
+              className="rounded-lg bg-brand-blue px-5 py-3 font-nav text-[16px] font-medium tracking-[-0.54px] text-white transition hover:bg-brand-blue-deep xl:px-7 xl:text-[17px]"
             >
               login
             </a>
           </div>
 
-          {/* Mobile actions */}
-          <div className="flex items-center gap-3 lg:hidden">
+          {/* Mobile / tablet actions */}
+          <div className="flex items-center gap-3 xl:hidden">
             <a
-              href="#login"
+              href="#booking"
               className="rounded-lg bg-brand-blue px-4 py-2 text-sm font-semibold text-white"
             >
               login
             </a>
             <button
+              ref={toggleRef}
               type="button"
               aria-label="Toggle navigation"
               aria-expanded={open}
+              aria-controls="mobile-menu"
               onClick={() => setOpen((v) => !v)}
               className="grid h-10 w-10 place-items-center rounded-lg border border-brand-line"
             >
@@ -107,8 +129,10 @@ export default function Navbar() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-40 lg:hidden ${open ? "" : "pointer-events-none"}`}
+        id="mobile-menu"
+        className={`fixed inset-0 z-40 xl:hidden ${open ? "" : "pointer-events-none"}`}
         aria-hidden={!open}
+        inert={!open}
       >
         <div
           className={`absolute inset-0 bg-black/40 transition-opacity ${
@@ -152,7 +176,7 @@ export default function Navbar() {
             </li>
             <li className="mt-2">
               <a
-                href="#login"
+                href="#booking"
                 onClick={() => setOpen(false)}
                 className="block rounded-lg bg-brand-blue px-6 py-3 text-center text-[17px] font-semibold text-white"
               >
