@@ -1,44 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useScrollReveal from "../../hooks/useScrollReveal";
 import { testimonials } from "../../data/content";
+import SliderButton from "../common/SliderButton";
 
-function SliderButton({ direction, onClick, disabled }) {
-  const isPrev = direction === "prev";
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      aria-label={isPrev ? "Previous testimonial" : "Next testimonial"}
-      className="slider-arrow"
-    >
-      <svg viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
-        {isPrev ? (
-          <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-        ) : (
-          <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
-        )}
-      </svg>
-    </button>
-  );
+function useVisibleCount() {
+  const [count, setCount] = useState(3);
+
+  useEffect(() => {
+    const sm = window.matchMedia("(min-width: 640px)");
+    const lg = window.matchMedia("(min-width: 1024px)");
+    const update = () => {
+      if (lg.matches) setCount(3);
+      else if (sm.matches) setCount(2);
+      else setCount(1);
+    };
+    update();
+    sm.addEventListener("change", update);
+    lg.addEventListener("change", update);
+    return () => {
+      sm.removeEventListener("change", update);
+      lg.removeEventListener("change", update);
+    };
+  }, []);
+
+  return count;
 }
-
-const VISIBLE = 3;
 
 export default function Testimonials() {
   const [start, setStart] = useState(0);
+  const visible = useVisibleCount();
   const containerRef = useScrollReveal({ y: 36, stagger: 0.12 });
 
-  const maxStart = Math.max(0, testimonials.length - VISIBLE);
+  const maxStart = Math.max(0, testimonials.length - visible);
   const next = () => setStart((s) => Math.min(s + 1, maxStart));
   const prev = () => setStart((s) => Math.max(s - 1, 0));
 
-  const items = testimonials.slice(start, start + VISIBLE);
+  // Clamp when the visible count shrinks (desktop → mobile).
+  useEffect(() => {
+    setStart((s) => Math.min(s, maxStart));
+  }, [maxStart]);
+
+  const items = testimonials.slice(start, start + visible);
 
   return (
     <section
       id="reviews"
-      className="bg-brand-surface-2 py-[50px] lg:py-[70px]"
+      className="scroll-mt-24 bg-brand-surface-2 py-[50px] lg:py-[70px]"
     >
       <div ref={containerRef} className="container-x">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -51,33 +58,36 @@ export default function Testimonials() {
             </p>
           </div>
           <div data-reveal className="flex gap-3 lg:pb-1">
-            <SliderButton direction="prev" onClick={prev} disabled={start === 0} />
+            <SliderButton
+              direction="prev"
+              onClick={prev}
+              disabled={start === 0}
+              label="Previous testimonial"
+            />
             <SliderButton
               direction="next"
               onClick={next}
               disabled={start >= maxStart}
+              label="Next testimonial"
             />
           </div>
         </div>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:mt-[50px] lg:grid-cols-3">
-          {items.map((t) => (
-            <article
-              key={t.name}
-              data-reveal
-              className="overflow-hidden rounded-xl bg-white shadow-sm"
-            >
-              <div className="relative h-[240px] overflow-hidden lg:h-[270px]">
+          {items.map((t) => {
+            const media = (
+              <>
                 <img
                   src={t.image}
                   alt=""
+                  width="640"
+                  height="360"
                   className="absolute inset-0 h-full w-full object-cover"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-black/20" />
 
-                <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-md bg-white/95 px-2 py-1 text-[12px] font-bold text-brand-ink">
-                  <img src="/assets/images/gaibook-logo.svg" alt="" className="h-3.5 w-auto" />
+                <span className="absolute right-3 top-3 inline-flex items-center rounded-md bg-white/95 px-2 py-1 text-[12px] font-bold text-brand-ink">
                   garibook
                 </span>
 
@@ -93,23 +103,48 @@ export default function Testimonials() {
                   </p>
                 </div>
 
-                <button
-                  type="button"
-                  aria-label={`Play testimonial from ${t.name}`}
-                  className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#FF0000] text-white shadow-lg transition-transform hover:scale-110"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M8 5v14l11-7-11-7Z" />
-                  </svg>
-                </button>
-              </div>
+                {t.videoUrl ? (
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#FF0000] text-white shadow-lg"
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7-11-7Z" />
+                    </svg>
+                  </span>
+                ) : null}
+              </>
+            );
 
-              <div className="p-5">
-                <p className="m-0 text-[18px] font-bold text-brand-ink">{t.name}</p>
-                <p className="m-0 mt-1 text-[15px] text-brand-muted">{t.role}</p>
-              </div>
-            </article>
-          ))}
+            return (
+              <article
+                key={t.name}
+                data-reveal
+                className="overflow-hidden rounded-xl bg-white shadow-sm"
+              >
+                <div className="relative h-[240px] overflow-hidden lg:h-[270px]">
+                  {t.videoUrl ? (
+                    <a
+                      href={t.videoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Watch ${t.name}'s testimonial video`}
+                      className="block h-full w-full"
+                    >
+                      {media}
+                    </a>
+                  ) : (
+                    <div className="h-full w-full">{media}</div>
+                  )}
+                </div>
+
+                <div className="p-5">
+                  <p className="m-0 text-[18px] font-bold text-brand-ink">{t.name}</p>
+                  <p className="m-0 mt-1 text-[15px] text-brand-muted-2">{t.role}</p>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

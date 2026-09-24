@@ -40,7 +40,7 @@ function CompanyBlock({ title, logo, logoAlt, name }) {
       <div className="mt-3 flex items-center gap-3 lg:mt-4">
         <img src={logo} alt={logoAlt} width="95" height="78" className="h-[70px] w-auto object-contain" />
         <div>
-          <h5 className="m-0 text-[18px] font-semibold text-white">{name}</h5>
+          <h3 className="m-0 text-[18px] font-semibold text-white">{name}</h3>
           <a
             href="#"
             className="mt-1 inline-flex items-center gap-1.5 text-[16px] font-bold text-brand-yellow hover:underline"
@@ -135,7 +135,8 @@ export default function Footer() {
         <img
           src="/assets/images/clients/ssl.png"
           alt="SSL Comodo security badge — payment partners"
-          width="100%"
+          width="1320"
+          height="120"
           className="h-auto w-full"
           loading="lazy"
         />

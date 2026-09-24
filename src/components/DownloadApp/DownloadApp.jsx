@@ -6,7 +6,7 @@ export default function DownloadApp() {
   const containerRef = useScrollReveal({ y: 40 });
 
   return (
-    <section className="bg-white py-[50px] lg:py-[70px]">
+    <section id="download" className="scroll-mt-24 bg-white py-[50px] lg:py-[70px]">
       <div ref={containerRef} className="container-x">
         <div
           data-reveal
