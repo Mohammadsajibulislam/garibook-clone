@@ -5,7 +5,7 @@ export default function FreedomJourney() {
   const containerRef = useScrollReveal({ y: 40, stagger: 0.15 });
 
   return (
-    <section id="freedom" className="bg-black py-[50px] lg:py-[70px]">
+    <section id="freedom" className="scroll-mt-24 bg-black py-[50px] lg:py-[70px]">
       <div ref={containerRef} className="container-x">
         <div className="section-header" data-reveal>
           <h2 className="section-title m-0 text-white">Freedom in Every Journey</h2>
@@ -16,8 +16,8 @@ export default function FreedomJourney() {
             <img
               src="/assets/images/banner/garibook_freedom.webp"
               alt="Couple enjoying a ride together"
-              width="100%"
-              height="100%"
+              width="1200"
+              height="630"
               className="h-full w-full object-cover"
               loading="lazy"
             />
