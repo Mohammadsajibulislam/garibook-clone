@@ -2,15 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { airports, carTypes, stats } from "../../data/content";
+import { prefersReducedMotion } from "../../hooks/useScrollReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const carTripTypes = ["One Way", "Round Way", "Hourly"];
 const airportTripTypes = ["From Airport", "From Home"];
 
-function FieldLabel({ icon, children, required = true }) {
+function FieldLabel({ icon, children, required = true, htmlFor }) {
   return (
-    <label className="mb-3 flex items-center gap-2 text-[18px] font-semibold leading-5 tracking-[-0.4px] text-brand-ink lg:text-[20px]">
+    <label
+      htmlFor={htmlFor}
+      className="mb-3 flex items-center gap-2 text-[18px] font-semibold leading-5 tracking-[-0.4px] text-brand-ink lg:text-[20px]"
+    >
       <img src={icon} alt="" width="20" height="20" className="h-5 w-5" />
       <span>
         {children}
@@ -23,7 +27,7 @@ function FieldLabel({ icon, children, required = true }) {
 function TripRadio({ name, value, checked, onChange, label }) {
   return (
     <label
-      className={`flex cursor-pointer items-center gap-2 rounded-lg px-3 py-3 transition ${
+      className={`flex cursor-pointer items-center gap-2 rounded-lg px-3 py-3 transition focus-within:ring-2 focus-within:ring-brand-blue focus-within:ring-offset-2 ${
         checked ? "bg-[#F2F2FF]" : "hover:bg-black/[0.03]"
       }`}
     >
@@ -95,15 +99,15 @@ function BookingForm() {
       <div className="booking-shadow -mt-5 rounded-xl bg-white px-5 pb-8 pt-8 sm:px-7 sm:pb-[43px] sm:pt-10">
         <div className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 xl:grid-cols-4">
           <div className="border-brand-line pb-4 pr-0 sm:border-b sm:pr-6 xl:border-b-0 xl:border-r xl:pb-0">
-            <FieldLabel icon="/assets/icon/fi_9610434.svg">
+            <FieldLabel icon="/assets/icon/fi_9610434.svg" htmlFor="booking-car">
               Choose a Car
             </FieldLabel>
             <div className="relative">
               <select
+                id="booking-car"
                 value={car}
                 onChange={(e) => setCar(e.target.value)}
-                aria-label="Choose a Car"
-                className="form-field-input appearance-none pr-10 font-medium text-brand-muted"
+                className="form-field-input appearance-none pr-10 font-medium text-brand-muted-2"
               >
                 <option value="">Select Car Type</option>
                 {carTypes.map((c) => (
@@ -121,22 +125,25 @@ function BookingForm() {
           </div>
 
           <div className="border-brand-line py-4 pr-0 sm:border-b sm:pr-6 xl:border-b-0 xl:border-r xl:py-0">
-            <FieldLabel icon="/assets/icon/Frame76.svg">
+            <FieldLabel
+              icon="/assets/icon/Frame76.svg"
+              htmlFor={isCar ? "booking-pickup" : "booking-airport"}
+            >
               {isCar ? "Pickup Location" : "Pickup Airport"}
             </FieldLabel>
             {isCar ? (
               <input
+                id="booking-pickup"
                 type="text"
                 placeholder="Enter Pickup Location"
-                aria-label="Pickup Location"
                 className="form-field-input"
               />
             ) : (
               <select
+                id="booking-airport"
                 value={airport}
                 onChange={(e) => setAirport(e.target.value)}
-                aria-label="Pickup Airport"
-                className="form-field-input appearance-none pr-10 font-medium text-brand-muted"
+                className="form-field-input appearance-none pr-10 font-medium text-brand-muted-2"
               >
                 <option value="">Select Airport</option>
                 {airports.map((a) => (
@@ -149,25 +156,25 @@ function BookingForm() {
           </div>
 
           <div className="border-brand-line py-4 pr-0 sm:border-b sm:pr-6 xl:border-b-0 xl:border-r xl:py-0">
-            <FieldLabel icon="/assets/icon/fi_14910621.svg">
+            <FieldLabel icon="/assets/icon/fi_14910621.svg" htmlFor="booking-dropoff">
               Drop-off Location
             </FieldLabel>
             <input
+              id="booking-dropoff"
               type="text"
               placeholder="Enter Drop-off Location"
-              aria-label="Drop-off Location"
               className="form-field-input"
             />
           </div>
 
           <div className="py-4 sm:pl-0 xl:py-0 xl:pl-6">
-            <FieldLabel icon="/assets/icon/fi_12516022.svg">
+            <FieldLabel icon="/assets/icon/fi_12516022.svg" htmlFor="booking-datetime">
               Pickup Date &amp; Time
             </FieldLabel>
             <input
+              id="booking-datetime"
               type="text"
               placeholder="MM/DD/YYYY 00:00 PM"
-              aria-label="Pickup Date and Time"
               onFocus={(e) => {
                 e.target.type = "datetime-local";
               }}
@@ -212,7 +219,9 @@ function BookingForm() {
   );
 }
 
-/** GSAP animation #3 — count-up when the stats band enters the viewport. */
+/** GSAP animation #3 — count-up when the stats band enters the viewport.
+ *  Final values render in the HTML so nothing is stuck at 0 if JS never runs.
+ */
 function StatsBar() {
   const sectionRef = useRef(null);
   const numberRefs = useRef([]);
@@ -220,6 +229,7 @@ function StatsBar() {
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return undefined;
+    if (prefersReducedMotion()) return undefined;
 
     const ctx = gsap.context(() => {
       stats.forEach((stat, i) => {
@@ -235,6 +245,9 @@ function StatsBar() {
             start: "top 75%",
             once: true,
           },
+          onStart: () => {
+            target.textContent = `0${stat.suffix}`;
+          },
           onUpdate: () => {
             target.textContent = `${Math.floor(counter.value).toLocaleString()}${stat.suffix}`;
           },
@@ -242,7 +255,12 @@ function StatsBar() {
       });
     }, el);
 
-    return () => ctx.revert();
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refresh);
+    return () => {
+      window.removeEventListener("load", refresh);
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -267,7 +285,8 @@ function StatsBar() {
                     }}
                     className="m-0 text-[32px] font-bold leading-9 text-brand-yellow-soft lg:text-[40px] lg:leading-[44px]"
                   >
-                    0{stat.suffix}
+                    {stat.value.toLocaleString()}
+                    {stat.suffix}
                   </h4>
                   <span className="block text-[18px] font-semibold leading-7 text-white lg:text-[24px]">
                     {stat.label}
@@ -290,6 +309,7 @@ export default function BookingSection() {
   const rootRef = useRef(null);
 
   useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         "[data-booking-form]",
@@ -304,14 +324,14 @@ export default function BookingSection() {
     <section
       id="booking"
       ref={rootRef}
-      className="relative z-10 bg-[linear-gradient(270deg,#0E53FF_0%,#0038C4_100%)]"
+      className="relative z-10 scroll-mt-24 bg-[linear-gradient(270deg,#0E53FF_0%,#0038C4_100%)]"
     >
       <div className="container-x">
-        <div data-booking-form className="-translate-y-[120px] sm:-translate-y-[150px]">
+        <div data-booking-form className="-translate-y-[100px] sm:-translate-y-[150px]">
           <BookingForm />
         </div>
       </div>
-      <div className="-mt-[80px] sm:-mt-[100px]">
+      <div className="-mt-[60px] sm:-mt-[100px]">
         <StatsBar />
       </div>
     </section>

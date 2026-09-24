@@ -6,7 +6,7 @@ export default function BookingArrival() {
   const containerRef = useScrollReveal({ y: 40, stagger: 0.12 });
 
   return (
-    <section id="arrival" className="bg-black py-[50px] lg:py-[70px]">
+    <section id="arrival" className="scroll-mt-24 bg-black py-[50px] lg:py-[70px]">
       <div ref={containerRef} className="container-x">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[720px] lg:w-1/2" data-reveal>
@@ -29,8 +29,8 @@ export default function BookingArrival() {
               <img
                 src={card.image}
                 alt={card.alt}
-                width="100%"
-                height="100%"
+                width="640"
+                height="400"
                 className="h-[200px] w-full rounded-t-xl object-cover sm:h-[240px] lg:h-[280px]"
                 loading="lazy"
               />
