@@ -2,16 +2,23 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import TypingHeadline from "./TypingHeadline";
 import { WarningButton } from "../common/Buttons";
-import { APP_DOWNLOAD_URL, heroTitles } from "../../data/content";
+import {
+  APP_DOWNLOAD_URL,
+  heroTitles,
+} from "../../data/content";
+import { prefersReducedMotion } from "../../hooks/useScrollReveal";
 
 /**
  * GSAP animation #1 — orchestrated hero entrance on load:
  * headline → description → CTA, staggered with power3 easing.
+ * Skipped entirely when the user prefers reduced motion.
  */
 export default function Hero() {
   const rootRef = useRef(null);
 
   useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.fromTo(
@@ -37,7 +44,10 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={rootRef} className="relative bg-white pb-[220px] pt-10 sm:pt-[80px] lg:pt-[118px] lg:pb-[290px]">
+    <section
+      ref={rootRef}
+      className="relative bg-white pb-[150px] pt-10 sm:pt-[80px] sm:pb-[190px] lg:pt-[118px] lg:pb-[290px]"
+    >
       <div className="container-x">
         <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-10">
           <div className="hero-title-container">
@@ -52,7 +62,7 @@ export default function Hero() {
           <div className="lg:pt-2">
             <p
               data-hero-sub
-              className="m-0 max-w-[640px] text-[20px] font-medium leading-7 text-brand-muted sm:text-[28px] sm:leading-8"
+              className="m-0 max-w-[640px] text-[20px] font-medium leading-7 text-brand-muted-2 sm:text-[28px] sm:leading-8"
             >
               Choose your city, pick your car and enjoy the journey with
               Garibook&rsquo;s best drivers.

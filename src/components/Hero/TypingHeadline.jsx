@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { prefersReducedMotion } from "../../hooks/useScrollReveal";
 
 const TYPE_SPEED = 60;
 const DELETE_SPEED = 35;
@@ -30,14 +31,18 @@ function buildTyped(segments, charCount) {
 /**
  * Typewriter loop across hero headlines, with per-word accent segments.
  * Mirrors the reference hero's typing-text effect (60ms type / 2s hold).
+ * Screen readers get a single static headline instead of per-character updates.
  */
 export default function TypingHeadline({ titles }) {
   const flatTitles = useMemo(() => titles.map(flatten), [titles]);
   const [titleIndex, setTitleIndex] = useState(0);
   const [charCount, setCharCount] = useState(0);
   const [deleting, setDeleting] = useState(false);
+  const [reduced] = useState(() => prefersReducedMotion());
 
   useEffect(() => {
+    if (reduced) return undefined;
+
     const full = flatTitles[titleIndex];
     let timeoutId;
 
@@ -70,21 +75,30 @@ export default function TypingHeadline({ titles }) {
 
     timeoutId = setTimeout(tick, deleting ? DELETE_SPEED : TYPE_SPEED);
     return () => clearTimeout(timeoutId);
-  }, [titleIndex, deleting, flatTitles]);
+  }, [titleIndex, deleting, flatTitles, reduced]);
+
+  if (reduced) {
+    return <span className="typing-text-static">{flatTitles[titleIndex]}</span>;
+  }
 
   const nodes = buildTyped(titles[titleIndex], charCount);
 
   return (
-    <span className="typing-text" aria-live="polite">
-      {nodes.map((n) =>
-        n.accent ? (
-          <span key={n.key} className="text-brand-ink">
-            {n.text}
-          </span>
-        ) : (
-          <span key={n.key}>{n.text}</span>
-        )
-      )}
-    </span>
+    <>
+      <span className="sr-only">{flatTitles[titleIndex]}</span>
+      <span className="typing-text" aria-hidden="true">
+        {nodes.map((n) =>
+          n.accent ? (
+            <span key={n.key} className="text-brand-blue">
+              {n.text}
+            </span>
+          ) : (
+            <span key={n.key}>{n.text}</span>
+          )
+        )}
+      </span>
+    </>
   );
 }
+
+
