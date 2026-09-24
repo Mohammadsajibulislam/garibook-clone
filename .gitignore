@@ -26,3 +26,5 @@ dist-ssr
 # Local screenshot captures (reference + verification only)
 .ref-shots
 .own-shots
+
+.vercel

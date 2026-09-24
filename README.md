@@ -2,6 +2,8 @@
 
 A responsive, component-based recreation of the [Garibook](https://garibook.com/) homepage, built for the Endow Tech Frontend Intern technical assessment.
 
+# Live Link : [garibook-clone-omega.vercel.app](https://garibook-clone-omega.vercel.app/)
+
 ## Tech Stack
 
 - **React 19** + **Vite** — fast dev/build tooling
@@ -62,11 +64,19 @@ Each section of the homepage is its own component (rather than one large page fi
 
 ## Responsiveness
 
-The layout is built mobile-first with Tailwind's `sm` / `lg` breakpoints:
-- Navbar collapses into a toggleable mobile menu below `lg`.
-- The hero's headline/form pair stacks to a single column on small screens.
-- Card grids (services, choose steps, people together, testimonials, news, blog) go from a single column on mobile to 2–4 columns on larger screens.
-- Interactive elements (buttons, links, form fields, the mobile menu toggle) expose visible `:focus-visible` states.
+The layout is built mobile-first with Tailwind's `sm` / `lg` / `xl` breakpoints:
+
+- Navbar collapses into a toggleable mobile menu below `xl` (Escape closes it, focus returns to the toggle, and the closed drawer is `inert` so keyboard users can't tab into it). Desktop nav uses tighter gaps/text at `lg` so the six long links never overflow.
+- The hero's headline/form pair stacks to a single column on small screens; hero bottom padding is tuned per breakpoint so the overlapping booking card doesn't leave a dead gap.
+- Card grids (services, choose steps, people together, testimonials, news, blog) go from a single column on mobile to 2–4 columns on larger screens. `BookingArrival` uses `lg:col-span-*` so tablet (`sm`–`md`) stays on a clean 2-column grid.
+- The testimonial slider shows 1 / 2 / 3 cards at `sm` / `md` / `lg`+ and clamps the page index when the viewport shrinks.
+- Interactive elements (buttons, links, form fields, the mobile menu toggle) expose visible `:focus-visible` states, and form labels are associated via `htmlFor`/`id`.
+
+## Accessibility & motion
+
+- `prefers-reduced-motion` disables GSAP entrance/scroll/count-up animations **and** the typewriter loop (a static headline is shown instead) — not just CSS transitions.
+- Scroll-reveal content stays fully visible if GSAP never runs, so sections can't get stuck at opacity 0.
+- The animated headline is `aria-hidden` with an `sr-only` static equivalent instead of announcing every keystroke via `aria-live`.
 
 ## Notes / Decisions
 
