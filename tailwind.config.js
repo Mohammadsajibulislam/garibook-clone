@@ -21,7 +21,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["Montserrat", "sans-serif"],
+        sans: ["Montserrat", "Noto Sans Bengali", "sans-serif"],
         nav: ["'Uncut Sans'", "Montserrat", "sans-serif"],
       },
       maxWidth: {

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,7 +13,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat", "Noto Sans Bengali", sans-serif;
   color: #121212;
   background: #ffffff;
   -webkit-font-smoothing: antialiased;
@@ -172,16 +172,29 @@ img {
   }
 
   .form-field-input {
-    @apply h-[42px] w-full rounded-lg border border-brand-line bg-white px-3 text-[16px] font-semibold text-brand-ink outline-none transition placeholder:font-medium placeholder:text-brand-muted focus:border-brand-blue;
+    @apply h-[42px] w-full rounded-lg border border-brand-line bg-white px-3 text-[16px] font-semibold text-brand-ink outline-none transition placeholder:font-medium placeholder:text-brand-muted-2 focus:border-brand-blue;
+  }
+
+  /* Screen-reader-only helper (used by the typewriter headline) */
+  .sr-only {
+    @apply absolute h-px w-px overflow-hidden whitespace-nowrap border-0 p-0;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    margin: -1px;
   }
 }
 
 /* Typing caret — mirrors .typing-text:after */
-.typing-text::after {
+.typing-text::after,
+.typing-text-static::after {
   content: "|";
   animation: blink 1s step-end infinite;
   color: #0e52ff;
   margin-left: 3px;
+}
+
+.typing-text-static::after {
+  animation: none;
 }
 
 @keyframes blink {
